@@ -5,7 +5,6 @@
 #include <PubSubClient.h>
 
 #include "conf.h"
-#include "tmpsensor.h"
 #include "memory.h"
 
 WiFiClient espClient;
@@ -107,9 +106,6 @@ void callback(char* topic, unsigned char* payload, unsigned int length) {
           *mqtt_sub_var[i] = atoi(data);
         }
         switch(mqtt_sub_topics_int[i]) {
-          case MQTT_CALEFACTOR_TSEL_TOPIC_ENUM:
-            *mqtt_sub_var[i] = update_eeprom_temperature_sel(*mqtt_sub_var[i]);
-            break;
           case MQTT_CALEFACTOR_POWER_TOPIC_ENUM:
             *mqtt_sub_var[i] = update_eeprom_calefactor_power(*mqtt_sub_var[i]);
             break;
@@ -169,8 +165,6 @@ void setup_comm()
 }
 
 void loop_comm() {
-  bool ret = false;
-  
   connection_status = mqtt_client.connected();
   if (connection_status) {
     mqtt_client.loop();
